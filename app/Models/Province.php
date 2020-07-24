@@ -10,7 +10,8 @@ class Province extends Model
 
     protected $fillable = [
         'name',
-        'code'
+        'code',
+        'country_id'
     ];
 
     /**

@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProvinceRequest;
+use App\Http\Resources\ProvinceResource;
 use Illuminate\Http\Request;
+use App\Models\Province;
+use DB;
+use Exception;
 
 class ProvinceController extends Controller
 {
@@ -13,7 +18,8 @@ class ProvinceController extends Controller
      */
     public function index()
     {
-        //
+        $provinces = Province::orderBy('name')->get();
+        return ProvinceResource::collection($provinces);
     }
 
     /**
@@ -22,9 +28,20 @@ class ProvinceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProvinceRequest $request)
     {
-        //
+        DB::beginTransaction();
+
+        try {
+            $province = new Province();
+            $province->fill($request->all());
+            $province->saveOrFail();
+            DB::commit();
+            return new ProvinceResource($province);
+        }catch(Exception $e) {
+            DB::rollback();
+            return response()->json(['message' => 'Hubo un error la provincia, intente nuevamente', 'details'=>  $e->getMessage()],411);
+        }
     }
 
     /**
@@ -35,7 +52,12 @@ class ProvinceController extends Controller
      */
     public function show($id)
     {
-        //
+        $province = Province::find($id);
+        if ($province) {
+            return new ProvinceResource($province);
+        }
+        return response()->json(['message' => 'Provincia no encontrada'], 404);
+
     }
 
     /**
@@ -45,9 +67,23 @@ class ProvinceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProvinceRequest $request, $id)
     {
-        //
+        DB::beginTransaction();
+
+        try {
+            $province = Province::find($id);
+            if ($province) {
+                $province->fill($request->all());
+                $province->saveOrFail();
+                DB::commit();
+                return new ProvinceResource($province);
+            }
+            return response()->json(['message' => 'Provincia no encontrada'], 404);
+        }catch(Exception $e) {
+            DB::rollback();
+            return response()->json(['message' => 'Hubo un error al actualizar la provincia, intente nuevamente', 'details' => $e->getMessage()],411);
+        }
     }
 
     /**
@@ -58,6 +94,14 @@ class ProvinceController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $province = Province::find($id);
+
+        if ($province) {
+            $provinceName =  $province->name;
+            if($province->delete())
+                return response()->json(['message' => "Provincia {$provinceName} eliminada Correctamente"],200);
+        }
+        return response()->json(['message' => 'Provincia no encontrada'], 404);
+
     }
 }
