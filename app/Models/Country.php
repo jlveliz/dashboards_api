@@ -10,4 +10,10 @@ class Country extends Model
         'name',
         'code'
     ];
+
+
+    public function provinces()
+    {
+        return $this->hasMany('App\Models\Province', 'country_id');
+    }
 }

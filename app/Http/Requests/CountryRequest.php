@@ -33,8 +33,8 @@ class CountryRequest extends FormRequest implements ValidationInterface
     public function validateOnSave()
     {
         return [
-            'name' => 'required|unique:countries',
-            'code' => 'required|unique:countries'
+            'name' => 'required|unique:countries,name',
+            'code' => 'required|unique:countries,code'
         ];
     }
 
@@ -42,8 +42,8 @@ class CountryRequest extends FormRequest implements ValidationInterface
     {
         $countryId = $this->route('country');
         return [
-            'name' => 'required|unique:countries,id,'.$countryId,
-            'code' => 'required|unique:countries,id,'.$countryId,
+            'name' => 'required|unique:countries,name,'.$countryId,
+            'code' => 'required|unique:countries,code,'.$countryId,
         ];
     }
 }

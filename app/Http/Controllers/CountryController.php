@@ -84,7 +84,7 @@ class CountryController extends Controller
             return response()->json(['message' => 'Pais no encontrado'], 404);
         }catch(Exception $e) {
             DB::rollback();
-            return response()->json(['message' => 'Hubo un error al actualizar el pais, intente nuevamente'],411);
+            return response()->json(['message' => 'Hubo un error al actualizar el pais, intente nuevamente', 'details' => $e->getMessage()],411);
         }
 
 
