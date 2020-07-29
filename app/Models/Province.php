@@ -21,4 +21,9 @@ class Province extends Model
     {
         return $this->belongsTo('App\Models\Country', 'country_id');
     }
+
+    public function cities()
+    {
+        return $this->hasMany('App\Models\City', 'province_id');
+    }
 }
