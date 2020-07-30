@@ -17,7 +17,7 @@ class CreateTableCities extends Migration
             $table->id();
             $table->integer('province_id');
             $table->string('name',100);
-            $table->string('code',150)->unique();
+            $table->string('code',150);
             $table->timestamps();
         });
     }

@@ -33,7 +33,7 @@ class ProvinceRequest extends FormRequest implements ValidationInterface
     public function validateOnSave()
     {
         return [
-            'country_id'=>'required|exists:provinces,id',
+            'country_id'=>'required|exists:countries,id',
             'name' => 'required|unique:provinces,name',
             'code' => 'required|unique:provinces,code'
         ];
@@ -43,7 +43,7 @@ class ProvinceRequest extends FormRequest implements ValidationInterface
     {
         $provId = $this->route('province');
         return [
-            'country_id'=>'required|exists:provinces,id',
+            'country_id'=>'required|exists:countries,id',
             'name' => 'required|unique:provinces,name,'.$provId,
             'code' => 'required|unique:provinces,code,'.$provId,
         ];
