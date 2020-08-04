@@ -22,3 +22,4 @@ Route::resource('countries', 'CountryController');
 Route::resource('provinces', 'ProvinceController');
 Route::resource('cities', 'CityController');
 Route::resource('categories', 'CategoryController');
+Route::resource('products', 'ProductController');
